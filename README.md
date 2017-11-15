@@ -1,6 +1,6 @@
 # Germania KG · RouteNameUrlCallable
 
-**Generates full URL string using Slim Request und Router.**
+**Callable for generating full URL string using Slim Request und Router.**
 
 
 ## Installation
@@ -25,9 +25,25 @@ Alternatively, add this package directly to your *composer.json:*
 <?php
 use Germania\RouteNameUrlCallable\RouteNameUrlCallable;
 
-// Instantiation
-$at = new RouteNameUrlCallable;
+// Have your Slim stuff available
+use Slim\Http\Request;
+use Slim\Router;
+use Slim\Http\Uri;
 
+$uri_factory = new RouteNameUrlCallable($request, $router);
+
+// Generate Slim\Http\Uri instance 
+$uri = $uri_factory("LoginPage");
+
+// s.th. like 'http://test.com/login'
+echo $uri->__toString();
+
+// Customizing the URL
+$url_arguments = array('hello' => 'John');
+$query_parameters = array('page' => '2');
+
+echo $uri_factory("IndexPage", $url_arguments);
+echo $uri_factory("IndexPage", $url_arguments, $query_parameters);
 ```
 
 
