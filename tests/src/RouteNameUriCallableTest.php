@@ -80,6 +80,7 @@ class RouteNameUriCallableTest extends \PHPUnit\Framework\TestCase
             [ $route_name, array(), $params, $scheme, $host, $path, "$scheme://$host$path?quu=baz&hello=john" ],
 
             [ $route_array, array(), array(), $scheme, $host, $path, "$scheme://$host$path?quu=baz&hello=john"],
+            [ $route_array, null, null, $scheme, $host, $path, "$scheme://$host$path?quu=baz&hello=john"],
 
             [ (object) $route_array, array(), array(), $scheme, $host, $path, "$scheme://$host$path?quu=baz&hello=john"],
 

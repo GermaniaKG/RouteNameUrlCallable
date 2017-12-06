@@ -36,8 +36,16 @@ class RouteNameUrlCallable
      * @param  array  $params Optional array with query string parameters
      * @return string Full URI
      */
-    public function __invoke( $route, array $args = array(), array $params = array() )
+    public function __invoke( $route, $args = array(), $params = array() )
     {
+        if (is_null( $args)):
+            $args = array();
+        endif;
+
+        if (is_null( $params)):
+            $params = array();
+        endif;
+
         if (is_string($route)):
             $name = $route;
 
