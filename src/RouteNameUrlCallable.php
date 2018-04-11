@@ -34,7 +34,7 @@ class RouteNameUrlCallable
      * @param  string|array $route Route name or array with name, arguments and query parameters
      * @param  array  $args   Optional array with URL arguments
      * @param  array  $params Optional array with query string parameters
-     * @return string Full URI
+     * @return Slim\Http\Uri Full URI
      */
     public function __invoke( $route, $args = array(), $params = array() )
     {
