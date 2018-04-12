@@ -1,5 +1,7 @@
+# .travis.yml
+
 # Default as of Sep. 2017
-dist: trusty
+# dist: trusty
 
 language: php
 php:
@@ -11,11 +13,11 @@ php:
 env:
 
 before_script:
-  - cp phpunit.xml.dist phpunit.xml
+  - composer self-update
   - composer install --no-interaction
+  - cp phpunit.xml.dist phpunit.xml
 
 script:
   - vendor/bin/phpunit
 
 after_script:
-
