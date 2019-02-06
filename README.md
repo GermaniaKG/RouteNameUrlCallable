@@ -2,8 +2,15 @@
 
 **Callable for generating full URL string using Slim Request und Router.**
 
+[![Packagist](https://img.shields.io/packagist/v/germania-kg/routenameurlcallable.svg?style=flat)](https://packagist.org/packages/germania-kg/routenameurlcallable)
+[![PHP version](https://img.shields.io/packagist/php-v/germania-kg/routenameurlcallable.svg)](https://packagist.org/packages/germania-kg/routenameurlcallable)
+[![Build Status](https://img.shields.io/travis/GermaniaKG/RouteNameUrlCallable.svg?label=Travis%20CI)](https://travis-ci.org/GermaniaKG/RouteNameUrlCallable)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/GermaniaKG/RouteNameUrlCallable/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/GermaniaKG/RouteNameUrlCallable/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/GermaniaKG/RouteNameUrlCallable/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/GermaniaKG/RouteNameUrlCallable/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/GermaniaKG/RouteNameUrlCallable/badges/build.png?b=master)](https://scrutinizer-ci.com/g/GermaniaKG/RouteNameUrlCallable/build-status/master)
 
-## Installation
+
+## Installation with Composer
 
 ```bash
 $ composer require germania-kg/routenameurlcallable
@@ -46,7 +53,6 @@ echo $uri_factory("IndexPage", $url_arguments);
 echo $uri_factory("IndexPage", $url_arguments, $query_parameters);
 ```
 
-
 ## Development
 
 ```bash
@@ -55,12 +61,14 @@ $ cd RouteNameUrlCallable
 $ composer install
 ```
 
-
 ## Unit tests
 
-Either copy `phpunit.xml.dist` to `phpunit.xml` and adapt to your needs, or leave as is. 
-Run [PhpUnit](https://phpunit.de/) like this:
+Either copy `phpunit.xml.dist` to `phpunit.xml` and adapt to your needs, or leave as is. Run [PhpUnit](https://phpunit.de/) test or composer scripts like this:
 
 ```bash
+$ composer test
+# or
 $ vendor/bin/phpunit
 ```
+
+
