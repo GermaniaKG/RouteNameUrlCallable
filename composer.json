@@ -31,7 +31,8 @@
 
     "require-dev": {
         "php-coveralls/php-coveralls": "^2.0",
-        "phpunit/phpunit": "^7.0|^8.0"
+        "phpunit/phpunit": "^7.0|^8.0",
+		"slim/psr7": "^0.6.0"
     },
 
     "scripts": {

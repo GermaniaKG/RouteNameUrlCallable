@@ -50,10 +50,12 @@ logs/*
 _schrott
 vendor
 node_modules
-var/*
-logs/*
+tests/logs
 config.json
 .htaccess
 tests/build
 build
 phpunit.xml
+.php_cs*
+.phpunit.result.cache
+
