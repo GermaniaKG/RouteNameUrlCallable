@@ -1,6 +1,6 @@
 # Germania KG · RouteNameUrlCallable
 
-**Callable for generating full URL string using Slim Request und Router.**
+**Callable for generating full URL string using Slim 3 Request und Router.**
 
 [![Packagist](https://img.shields.io/packagist/v/germania-kg/routenameurlcallable.svg?style=flat)](https://packagist.org/packages/germania-kg/routenameurlcallable)
 [![PHP version](https://img.shields.io/packagist/php-v/germania-kg/routenameurlcallable.svg)](https://packagist.org/packages/germania-kg/routenameurlcallable)
