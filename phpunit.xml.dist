@@ -19,11 +19,11 @@
 	</filter>
 
 	<logging>
-		<log type="coverage-clover" target="var/build/logs/clover.xml"/>
-		<log type="coverage-html"   target="var/build/logs/html/"/>
 		<log type="coverage-text"   target="php://stdout" showUncoveredFiles="true" />
-		<log type="testdox-html"    target="var/build/logs/testdox.html"/>
-		<log type="testdox-text"    target="var/build/logs/testdox.txt"/>
+		<log type="coverage-clover" target="tests/logs/clover.xml"/>
+		<log type="coverage-html"   target="tests/logs/html/"/>
+		<log type="testdox-html"    target="tests/logs/testdox.html"/>
+		<log type="testdox-text"    target="tests/logs/testdox.txt"/>
 	</logging>
 
 </phpunit>

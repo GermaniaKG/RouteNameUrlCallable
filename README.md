@@ -1,6 +1,7 @@
 # Germania KG · RouteNameUrlCallable
 
-**Callable for generating full URL string using Slim 3 Request und Router.**
+**Callable for generating full URL string using Slim 4 Request und Router.**
+For using Slim Framework 3, checkout the *v1* branch.
 
 [![Packagist](https://img.shields.io/packagist/v/germania-kg/routenameurlcallable.svg?style=flat)](https://packagist.org/packages/germania-kg/routenameurlcallable)
 [![PHP version](https://img.shields.io/packagist/php-v/germania-kg/routenameurlcallable.svg)](https://packagist.org/packages/germania-kg/routenameurlcallable)
@@ -13,14 +14,14 @@
 ## Installation with Composer
 
 ```bash
-$ composer require germania-kg/routenameurlcallable
+$ composer require germania-kg/routenameurlcallable "^2.0"
 ```
 
 Alternatively, add this package directly to your *composer.json:*
 
 ```json
 "require": {
-    "germania-kg/routenameurlcallable": "^1.0"
+    "germania-kg/routenameurlcallable": "^2.0"
 }
 ```
 
