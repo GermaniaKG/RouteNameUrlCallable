@@ -2,6 +2,9 @@
 
 **Callable for generating full URL string using Slim 3 Request und Router.**
 
+**This is v1 which requires Slim Framework 3.
+For using Slim Framework 4, see *master* branch.**
+
 [![Packagist](https://img.shields.io/packagist/v/germania-kg/routenameurlcallable.svg?style=flat)](https://packagist.org/packages/germania-kg/routenameurlcallable)
 [![PHP version](https://img.shields.io/packagist/php-v/germania-kg/routenameurlcallable.svg)](https://packagist.org/packages/germania-kg/routenameurlcallable)
 [![Build Status](https://img.shields.io/travis/GermaniaKG/RouteNameUrlCallable.svg?label=Travis%20CI)](https://travis-ci.org/GermaniaKG/RouteNameUrlCallable)
@@ -13,7 +16,7 @@
 ## Installation with Composer
 
 ```bash
-$ composer require germania-kg/routenameurlcallable
+$ composer require germania-kg/routenameurlcallable "^1.0"
 ```
 
 Alternatively, add this package directly to your *composer.json:*
