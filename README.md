@@ -25,34 +25,59 @@ Alternatively, add this package directly to your *composer.json:*
 }
 ```
 
-
 ## Usage
+
+Generate **Slim\Http\Uri** instance from a named route:
 
 
 ```php
 <?php
 use Germania\RouteNameUrlCallable\RouteNameUrlCallable;
+use Slim\Factory\AppFactory;
 
-// Have your Slim stuff available
-use Slim\Http\Request;
-use Slim\Router;
-use Slim\Http\Uri;
+$app = AppFactory::create();
+$app->addRoutingMiddleware();
 
-$uri_factory = new RouteNameUrlCallable($request, $router);
+// Create a named route
+$app->get("/login", function($request, $response, $args) {
+  // Show Form etc.
+  return $response;
+})->setName("LoginPage");
 
-// Generate Slim\Http\Uri instance 
-$uri = $uri_factory("LoginPage");
+// 
+$app->get("/", function($request, $response, $args) {
+	$uri_factory = new RouteNameUrlCallable($request);  
 
-// s.th. like 'http://test.com/login'
-echo $uri->__toString();
-
-// Customizing the URL
-$url_arguments = array('hello' => 'John');
-$query_parameters = array('page' => '2');
-
-echo $uri_factory("IndexPage", $url_arguments);
-echo $uri_factory("IndexPage", $url_arguments, $query_parameters);
+  $login_url = $uri_factory("LoginPage");
+  // echo $login_url->__toString();  
+  // http://test.com/login
+  
+  return $response->withHeader('Location', $login_url)->withStatus(302);
+});
 ```
+
+**Customizing the URI** with URL arguments
+
+```php
+$uri_factory = new RouteNameUrlCallable($request); 
+
+// A named route with Placeholders 
+$app->get("/hello/{name}", function($request, $response, $args) {
+  // Show Form etc.
+  return $response;
+})->setName("Hello");
+
+
+// Fill in route URL placeholder
+echo $uri_factory("Hello", ['name' => 'John']);
+
+// Optionally pass query parameters
+echo $uri_factory("Hello", array(), ['foo' => 'bar']);
+echo $uri_factory("Hello", ['name' => 'John'], ['foo' => 'bar']);
+
+```
+
+
 
 ## Development
 
