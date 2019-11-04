@@ -1,42 +1,63 @@
 <?php
 namespace Germania\RouteNameUrlCallable;
 
-use Slim\Http\Request;
-use Slim\Router;
+use Slim\Psr7\Request as SlimRequest;
+use Slim\Psr7\Uri as SlimUri;
+use Slim\Routing\RouteContext;
+use Slim\Routing\RouteParser;
+
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UriInterface;
 
 class RouteNameUrlCallable
 {
 
+
     /**
-     * @var Request
+     * @var SlimRequest
      */
     public $request;
 
+    /**
+     * @var Psr\Http\Message\UriInterface;
+     */
+    public $uri;
+
 
     /**
-     * @var Router
+     * @var Slim\Interfaces\RouteParser
      */
-    public $router;
+    public $route_parser;
 
 
     /**
-     * @param Request $request Slim Request instance
-     * @param Router  $router  Slim Router instance
+     * @param SlimRequest $request [description]
      */
-    public function __construct( Request $request, Router $router )
+    public function __construct( SlimRequest $request )
     {
         $this->request = $request;
-        $this->router = $router;
+        $this->uri = $request->getUri();
+
+        
+        # Method 1
+        $routeContext = RouteContext::fromRequest($request);
+        $this->route_parser = $routeContext->getRouteParser();
+        
+        # Method 2
+        // $this->route_parser = $request->getAttribute('routeParser');
     }
+
 
 
     /**
      * @param  string|array $route Route name or array with name, arguments and query parameters
      * @param  array  $args   Optional array with URL arguments
      * @param  array  $params Optional array with query string parameters
-     * @return Slim\Http\Uri Full URI
+     * 
+     * @return Psr\Http\Message\UriInterface
+     * @return Slim\Http\Uri Full URI in SLim flavour
      */
-    public function __invoke( $route, $args = array(), $params = array() )
+    public function __invoke( $route, $args = array(), $params = array() ) : SlimUri
     {
         if (is_null( $args)):
             $args = array();
@@ -61,17 +82,17 @@ class RouteNameUrlCallable
         endif;
 
         if (empty($name) or !is_string( $name )):
-            throw new \InvalidArgumentException("Route must be either a) non-empty string with route name or b) array with keys 'name' and, optionally, 'args' and/or 'params' array");
+            throw new \InvalidArgumentException("Route must be either a) non-empty string with route name"
+              . " or b) array with keys 'name' and, optionally, 'args' and/or 'params' array");
         endif;
 
 
-        // Get URL path
-        $url_path = $this->router->pathFor($name, $args );
-
-        // Build GET parameters
+        // Get URL path and build GET parameters
+        $url_path = $this->route_parser->urlFor($name, $args);
         $query_string = http_build_query($params);
 
         // Create return value
         return $this->request->getUri()->withPath( $url_path )->withQuery( $query_string );
     }
+
 }
