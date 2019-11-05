@@ -82,7 +82,7 @@ class RouteNameUrlCallable
         endif;
 
         if (empty($name) or !is_string( $name )):
-            throw new \InvalidArgumentException("Route must be either a) non-empty string with route name"
+            throw new RouteNameUrlInvalidArgumentException("Route must be either a) non-empty string with route name"
               . " or b) array with keys 'name' and, optionally, 'args' and/or 'params' array");
         endif;
 
