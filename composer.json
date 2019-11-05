@@ -2,6 +2,8 @@
 	"name": "germania-kg/routenameurlcallable",
 	"description": "Generates full URL for Slim 4's named routes, using RouteContext und RouteParser.",
 
+	"keywords": [ "named routes", "routes", "callable", "slim", "slim4", "UriInterface", "RouteContext", "RouteParser"],
+
 	"license": "MIT",
 
 	"authors": [
