@@ -6,8 +6,7 @@
 
 # Germania KG · RouteNameUrlCallable
 
-**Callable for generating full URL string using Slim 4's *RouteContext* and *RouteParser*.**
-For using Slim Framework 3, checkout the *v1* branch.
+**Callable for generating full URLs using Slim 4's *RouteContext* and *RouteParser*. Works well as Twig function.**
 
 [![Packagist](https://img.shields.io/packagist/v/germania-kg/routenameurlcallable.svg?style=flat)](https://packagist.org/packages/germania-kg/routenameurlcallable)
 [![PHP version](https://img.shields.io/packagist/php-v/germania-kg/routenameurlcallable.svg)](https://packagist.org/packages/germania-kg/routenameurlcallable)
@@ -19,6 +18,8 @@ For using Slim Framework 3, checkout the *v1* branch.
 
 
 ## Installation with Composer
+
+This package requires Slim Framework 4. For using Slim Framework 3, checkout the *v1* branch.
 
 ```bash
 $ composer require germania-kg/routenameurlcallable "^2.0"
@@ -151,6 +152,40 @@ http://test.com/hello/john?foo=bar&view=table
 echo $uri_factory( $url_data, [], ['foo' => 'baz', 'view' => 'table'] );
 http://test.com/hello/john?foo=baz&view=table
 ```
+
+
+
+### Usage with Twig
+
+Since *RouteNameUrlCallable* is callable, it can be used as [Twig Function](https://twig.symfony.com/doc/2.x/advanced.html#functions) inside a template:
+
+```twig
+{# "hello-user.html" #}
+<a href="{{route_url('hello', {'name' => user})}}">Say hello to {{user}}</a>
+```
+
+Inside you route controller, add the callable to Twig like this:
+
+```php
+<?php
+$app->get("/", function($request, $response, $args) {
+  
+  $uri_factory = new RouteNameUrlCallable($request);
+
+  $twig = new \Twig\Environment( ... );
+  $twig->addFunction(new \Twig\TwigFunction('route_url', $uri_factory));
+  
+  $html = $twig->render("hello-user.html", [
+    "user" => "john"
+  ]);
+  
+  $response->getBody()->write( $html );
+
+  return $response;
+});
+```
+
+
 
 
 
