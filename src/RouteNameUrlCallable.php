@@ -91,8 +91,7 @@ class RouteNameUrlCallable
         $url_path = $this->route_parser->urlFor($name, $args);
         $query_string = http_build_query($params);
 
-        // Create return value
-        return $this->request->getUri()->withPath( $url_path )->withQuery( $query_string );
+        return $this->uri->withPath( $url_path )->withQuery( $query_string );
     }
 
 }
