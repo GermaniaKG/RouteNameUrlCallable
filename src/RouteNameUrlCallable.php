@@ -55,7 +55,7 @@ class RouteNameUrlCallable
      * @param  array  $params Optional array with query string parameters
      * 
      * @return Psr\Http\Message\UriInterface
-     * @return Slim\Http\Uri Full URI in SLim flavour
+     * @return Slim\Http\Uri Full URI in Slim flavour
      */
     public function __invoke( $route, $args = array(), $params = array() ) : SlimUri
     {
