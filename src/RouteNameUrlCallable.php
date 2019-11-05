@@ -55,7 +55,7 @@ class RouteNameUrlCallable
      * @param  array  $params Optional array with query string parameters
      * 
      * @return Psr\Http\Message\UriInterface
-     * @return Slim\Http\Uri Full URI in SLim flavour
+     * @return Slim\Http\Uri Full URI in Slim flavour
      */
     public function __invoke( $route, $args = array(), $params = array() ) : SlimUri
     {
@@ -82,7 +82,7 @@ class RouteNameUrlCallable
         endif;
 
         if (empty($name) or !is_string( $name )):
-            throw new \InvalidArgumentException("Route must be either a) non-empty string with route name"
+            throw new RouteNameUrlInvalidArgumentException("Route must be either a) non-empty string with route name"
               . " or b) array with keys 'name' and, optionally, 'args' and/or 'params' array");
         endif;
 
@@ -91,8 +91,7 @@ class RouteNameUrlCallable
         $url_path = $this->route_parser->urlFor($name, $args);
         $query_string = http_build_query($params);
 
-        // Create return value
-        return $this->request->getUri()->withPath( $url_path )->withQuery( $query_string );
+        return $this->uri->withPath( $url_path )->withQuery( $query_string );
     }
 
 }
