@@ -6,8 +6,6 @@ use Germania\RouteNameUrlCallable\RouteNameUrlCallable;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use Slim\Http\Uri;
-use Prophecy\Argument;
-
 
 use Slim\Factory\AppFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
@@ -23,7 +21,7 @@ class RouteNameUriCallableTest extends \PHPUnit\Framework\TestCase
      */
     public function testInstantiation( UriInterface $start_page_uri, $route_name, $sut_route, $args, $params, $basePath, $expected )
     {
-        
+
         // Setup Slim App
         $app = AppFactory::create();
         $app->addRoutingMiddleware();
@@ -40,7 +38,7 @@ class RouteNameUriCallableTest extends \PHPUnit\Framework\TestCase
         $app->get( $route_url, function($request, $response) use ($sut_route, $params, $args) {
 
             $sut = new RouteNameUrlCallable( $request );
-            $result = $sut($sut_route, $args, $params)->__toString();            
+            $result = $sut($sut_route, $args, $params)->__toString();
 
             return $response->withHeader("RouteNameUrlCallable", $result);
         });
@@ -50,7 +48,7 @@ class RouteNameUriCallableTest extends \PHPUnit\Framework\TestCase
         $serverRequest = (new ServerRequestFactory)->createServerRequest("GET", $start_page_uri);
         $response = $app->handle($serverRequest);
 
-        // Eval        
+        // Eval
         $sut_result = $response->getHeaderLine( "RouteNameUrlCallable" );
         $this->assertEquals( $expected, $sut_result);
     }
@@ -62,7 +60,7 @@ class RouteNameUriCallableTest extends \PHPUnit\Framework\TestCase
     public function testExceptionOnWrongRouteNameArgument( UriInterface $start_page_uri, $route_name, $sut_route, $args, $params, $basePath, $expected )
     {
 
-        
+
         // Setup Slim App
         $app = AppFactory::create();
         $app->addRoutingMiddleware();
@@ -77,20 +75,20 @@ class RouteNameUriCallableTest extends \PHPUnit\Framework\TestCase
 
         // This route should utilize SUT
         $route_url = $start_page_uri->getPath();
-        $app->get( $route_url, function($request, $response) use ($sut_route, $params, $args) {
+        $app->get( $route_url, function($request, $response) use ($params, $args) {
             $sut = new RouteNameUrlCallable( $request );
 
             $invalid_route_name = "false";
-            $result = $sut($invalid_route_name, $args, $params)->__toString();          
+            $result = $sut($invalid_route_name, $args, $params)->__toString();
             return $response;
         });
-                  
+
 
         // Rund Slim 4, trying retrieving a Response.
         // In fact, the controller will throw an exception.
         $start_page_uri = (new UriFactory)->createUri( $start_page_uri );
         $serverRequest = (new ServerRequestFactory)->createServerRequest("GET", $start_page_uri);
-        
+
         $this->expectException( \Exception::class );
         $app->handle($serverRequest);
 
@@ -122,7 +120,7 @@ class RouteNameUriCallableTest extends \PHPUnit\Framework\TestCase
         $expected = $uri->withPath($path)->__toString();
 
         return array(
-            # $uri, $route_name, $sut_route,    $args,   $params,          $path, $expected
+            #                      $uri, $route_name, $sut_route,    $args,   $params,          $path, $expected
             [ $uri, $route_name, $route_name,   array(), array(),          $path, "$expected" ],
             [ $uri, $route_name, $route_name,   array(), $params,          $path, "$expected?quu=baz&hello=john" ],
             [ $uri, $route_name, $route_array,  array(), array(),          $path, "$expected?quu=baz&hello=john"],
