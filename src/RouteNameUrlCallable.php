@@ -19,12 +19,6 @@ class RouteNameUrlCallable
     public $request;
 
     /**
-     * @var Psr\Http\Message\UriInterface;
-     */
-    public $uri;
-
-
-    /**
      * @var Slim\Interfaces\RouteParser
      */
     public $route_parser;
@@ -35,16 +29,7 @@ class RouteNameUrlCallable
      */
     public function __construct( SlimRequest $request )
     {
-        $this->request = $request;
-        $this->uri = $request->getUri();
-
-        
-        # Method 1
-        $routeContext = RouteContext::fromRequest($request);
-        $this->route_parser = $routeContext->getRouteParser();
-        
-        # Method 2
-        // $this->route_parser = $request->getAttribute('routeParser');
+        $this->setSlimRequest($request);
     }
 
 
@@ -53,7 +38,7 @@ class RouteNameUrlCallable
      * @param  string|array $route Route name or array with name, arguments and query parameters
      * @param  array  $args   Optional array with URL arguments
      * @param  array  $params Optional array with query string parameters
-     * 
+     *
      * @return Psr\Http\Message\UriInterface
      * @return Slim\Http\Uri Full URI in Slim flavour
      */
@@ -88,10 +73,50 @@ class RouteNameUrlCallable
 
 
         // Get URL path and build GET parameters
-        $url_path = $this->route_parser->urlFor($name, $args);
+        $url_path = $this->getRouteParser()->urlFor($name, $args);
         $query_string = http_build_query($params);
 
-        return $this->uri->withPath( $url_path )->withQuery( $query_string );
+        $request = $this->getSlimRequest();
+        return $request->getUri()->withPath( $url_path )->withQuery( $query_string );
+    }
+
+
+    public function setSlimRequest( SlimRequest $request )
+    {
+        $this->request = $request;
+        $this->route_parser = null;
+        return $this;
+    }
+
+
+    public function getSlimRequest( ) : SlimRequest
+    {
+        return $this->request;
+    }
+
+
+    public function setRouteParser(RouteParser $route_parser)
+    {
+        $this->route_parser = $route_parser;
+        return $this;
+    }
+
+
+    public function getRouteParser() : RouteParser
+    {
+        if (!$this->route_parser)
+        {
+            // Method 1
+            $request = $this->getSlimRequest();
+            $routeContext = RouteContext::fromRequest($request);
+            $route_parser = $routeContext->getRouteParser();
+            $this->setRouteParser($route_parser);
+
+            // Method 2
+            // $this->route_parser = $request->getAttribute('routeParser');
+        }
+
+        return $this->route_parser;
     }
 
 }
