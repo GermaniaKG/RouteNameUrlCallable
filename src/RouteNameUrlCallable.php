@@ -1,37 +1,56 @@
 <?php
 namespace Germania\RouteNameUrlCallable;
 
-use Slim\Psr7\Request as SlimRequest;
-use Slim\Psr7\Uri as SlimUri;
+use Slim\Interfaces\RouteParserInterface;
 use Slim\Routing\RouteContext;
-use Slim\Routing\RouteParser;
-
-use Psr\Http\Message\ServerRequestInterface;
+use Slim\Psr7\Request as SlimRequest;
+use Slim\Psr7\Factory\UriFactory;
 use Psr\Http\Message\UriInterface;
 
 class RouteNameUrlCallable
 {
 
-
     /**
-     * @var SlimRequest
-     */
-    public $request;
-
-    /**
-     * @var Slim\Interfaces\RouteParser
+     * @var Slim\Interfaces\RouteParserInterface
      */
     public $route_parser;
 
 
+
     /**
-     * @param SlimRequest $request [description]
+     * In order to prepare for v3, the ctor accepts both SlimRequest or RouteParserInterface.
+     * As of v3, only RouteParserInterface will be accepted.
      */
-    public function __construct( SlimRequest $request )
+    public function __construct( $route_parser, UriInterface $uri = null )
     {
-        $this->setSlimRequest($request);
+        if ($route_parser instanceOf RouteParserInterface) {
+            $this->setRouteParser($route_parser);
+        }
+        elseif ($route_parser instanceOf SlimRequest) {
+            $uri = $uri ?: $route_parser->getUri();
+            $route_parser = static::getRouteParserFromRequest($route_parser);
+            $this->setRouteParser($route_parser);
+        }
+        else {
+            throw new \InvalidArgumentException("Expected RouteParserInterface or SlimRequest.");
+        }
+
+        $this->setUri( $uri ?: (new UriFactory)->createUri() );
     }
 
+
+    public static function fromRequest(SlimRequest $request)
+    {
+        $route_parser = static::getRouteParserFromRequest($request);
+        return new static($route_parser, $request->getUri());
+    }
+
+
+    public static function getRouteParserFromRequest( SlimRequest $request ) : RouteParserInterface
+    {
+        $routeContext = RouteContext::fromRequest($request);
+        return $routeContext->getRouteParser();
+    }
 
 
     /**
@@ -42,7 +61,7 @@ class RouteNameUrlCallable
      * @return Psr\Http\Message\UriInterface
      * @return Slim\Http\Uri Full URI in Slim flavour
      */
-    public function __invoke( $route, $args = array(), $params = array() ) : SlimUri
+    public function __invoke( $route, $args = array(), $params = array() ) : UriInterface
     {
         if (is_null( $args)):
             $args = array();
@@ -76,46 +95,26 @@ class RouteNameUrlCallable
         $url_path = $this->getRouteParser()->urlFor($name, $args);
         $query_string = http_build_query($params);
 
-        $request = $this->getSlimRequest();
-        return $request->getUri()->withPath( $url_path )->withQuery( $query_string );
+        return $this->uri->withPath( $url_path )->withQuery( $query_string );
     }
 
 
-    public function setSlimRequest( SlimRequest $request )
+    public function setUri(UriInterface $uri) : self
     {
-        $this->request = $request;
-        $this->route_parser = null;
+        $this->uri = $uri;
         return $this;
     }
 
 
-    public function getSlimRequest( ) : SlimRequest
-    {
-        return $this->request;
-    }
-
-
-    public function setRouteParser(RouteParser $route_parser)
+    public function setRouteParser(RouteParserInterface $route_parser)
     {
         $this->route_parser = $route_parser;
         return $this;
     }
 
 
-    public function getRouteParser() : RouteParser
+    public function getRouteParser() : RouteParserInterface
     {
-        if (!$this->route_parser)
-        {
-            // Method 1
-            $request = $this->getSlimRequest();
-            $routeContext = RouteContext::fromRequest($request);
-            $route_parser = $routeContext->getRouteParser();
-            $this->setRouteParser($route_parser);
-
-            // Method 2
-            // $this->route_parser = $request->getAttribute('routeParser');
-        }
-
         return $this->route_parser;
     }
 
