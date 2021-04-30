@@ -84,6 +84,31 @@ $app->post("/users", function($request, $response, $args) {
 });
 ```
 
+## Instantiation
+
+Pass a `Slim\Psr7\Request` instance to the constructor. This is the default variant as of release 2.
+
+```php
+$rnc = new RouteNameUrlCallable($request);  
+```
+
+As of release 2.2, it is also possible to inject a `Slim\Interfaces\RouteParserInterface`. This way will become the standard as of major release 3 (which at the time of writing has no time schedule).
+
+```php
+use Slim\Routing\RouteContext;
+
+$request = ...;
+$route_parser = RouteContext::fromRequest($request)->getRouteParser();
+
+$rnc = new RouteNameUrlCallable($route_parser); 
+```
+
+**Recommendation:** As a replacement for injecting the request into the constructor, one is encouraged to use the static `fromRequest` method.
+
+```php
+$rnc = RouteNameUrlCallable::fromRequest($request); 
+```
+
 
 
 ## Usage
@@ -115,7 +140,7 @@ $app->post("/users", function($request, $response, $args) {
   $user = "john";
   $route = "Hello";
   
-  $uri_factory = new RouteNameUrlCallable($request);  
+  $uri_factory = new RouteNameUrlCallable::fromRequest($request);  
 
   $location = $uri_factory($route, ['name' => $user]);
   echo get_class($location); 
