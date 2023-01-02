@@ -16,7 +16,7 @@ class RouteNameUrlCallable
     public $route_parser;
 
     /**
-     * @var UriInterface
+     * @var UriInterface|null
      */
     public $uri;
 
