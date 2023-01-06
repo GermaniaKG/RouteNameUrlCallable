@@ -11,7 +11,7 @@ class RouteNameUrlCallable
 {
 
     /**
-     * @var Slim\Interfaces\RouteParserInterface
+     * @var RouteParserInterface
      */
     public $route_parser;
 
@@ -46,7 +46,7 @@ class RouteNameUrlCallable
     public static function fromRequest(SlimRequest $request)
     {
         $route_parser = static::getRouteParserFromRequest($request);
-        return new static($route_parser, $request->getUri());
+        return new RouteNameUrlCallable($route_parser, $request->getUri());
     }
 
 
@@ -62,8 +62,7 @@ class RouteNameUrlCallable
      * @param  array  $args   Optional array with URL arguments
      * @param  array  $params Optional array with query string parameters
      *
-     * @return Psr\Http\Message\UriInterface
-     * @return Slim\Http\Uri Full URI in Slim flavour
+     * @return \Psr\Http\Message\UriInterface
      */
     public function __invoke( $route, $args = array(), $params = array() ) : UriInterface
     {
